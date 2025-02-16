@@ -7,7 +7,8 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { databases } from '$lib/appwrite.js';
 	import { ID } from 'appwrite';
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 
 	let { data } = $props();
 
@@ -26,6 +27,10 @@
 				returnUrl: returnUrl
 			});
 			await invalidateAll();
+			goto(`/app/forms/${data.forms.documents[0].$id}`);
+			toast.success('Form successfully created.');
+		} catch (err: any) {
+			toast.error(err.message ? err.message : err.toString());
 		} finally {
 			isLoading = false;
 		}
@@ -52,13 +57,13 @@
 				<Card.Root class="w-full hover:border-muted-foreground">
 					<Card.Header>
 						<Card.Title class="text-sm font-medium">
-							<code>
+							<code class="line-clamp-1">
 								{getHostname(form.returnUrl)}
 							</code>
 						</Card.Title>
 					</Card.Header>
 					<Card.Content class="-mt-2">
-						<div class="text-2xl font-bold">{form.name}</div>
+						<div class="line-clamp-1 text-2xl font-bold">{form.name}</div>
 						<p class="mt-1.5 text-xs text-muted-foreground">{form.submissions} total submissions</p>
 					</Card.Content>
 				</Card.Root>
@@ -100,6 +105,7 @@
 					<div class="flex w-full flex-col gap-2">
 						<Label for="return-url">Return URL</Label>
 						<Input
+							required={true}
 							bind:value={returnUrl}
 							id="return-url"
 							placeholder="https://myapp.com/thank-you"
@@ -109,7 +115,7 @@
 						<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 						<AlertDialog.Action type="submit" class="w-full">
 							{#if isLoading}
-								<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+								<LoaderCircle class="h-4 w-4 animate-spin" />
 							{:else}
 								<span>Create</span>
 							{/if}

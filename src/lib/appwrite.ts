@@ -11,4 +11,6 @@ export type AppwriteForm = {
 	name: string;
 	returnUrl: string;
 	submissions: number;
+	pinged: boolean;
+	discordUrl: string;
 } & Models.Document;

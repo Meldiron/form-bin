@@ -1,5 +1,7 @@
 <script lang="ts">
 	import '../app.css';
+	import { Toaster } from '$lib/components/ui/sonner';
+
 	let { data, children } = $props();
 </script>
 
@@ -25,3 +27,5 @@
 <main class="mx-auto mt-10 max-w-xl px-4">
 	{@render children()}
 </main>
+
+<Toaster />

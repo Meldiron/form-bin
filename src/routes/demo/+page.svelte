@@ -31,12 +31,20 @@
 	>
 		<div class="flex w-full flex-col gap-2">
 			<Label for="name">Your name</Label>
-			<Input bind:value={name} type="text" name="name" id="name" placeholder="John Doe" />
+			<Input
+				required={true}
+				bind:value={name}
+				type="text"
+				name="name"
+				id="name"
+				placeholder="John Doe"
+			/>
 		</div>
 
 		<div class="flex w-full flex-col gap-2">
 			<Label for="message">Message</Label>
 			<Textarea
+				required={true}
 				bind:value={message}
 				name="message"
 				id="message"
@@ -47,7 +55,7 @@
 		<div class="w-full">
 			<Button type="submit" class="w-full">
 				{#if isLoading}
-					<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+					<LoaderCircle class="h-4 w-4 animate-spin" />
 				{:else}
 					<p>Send message</p>
 				{/if}

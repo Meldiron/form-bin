@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import { account } from '$lib/appwrite';
 	import * as Card from '$lib/components/ui/card/index.ts';
 	import { Button } from '$lib/components/ui/form';
+	import { toast } from 'svelte-sonner';
 
 	let isLoading = $state(false);
 
@@ -12,6 +13,9 @@
 		try {
 			await account.deleteSession('current');
 			await invalidateAll();
+			toast.success('Successfully signed out.');
+		} catch (err: any) {
+			toast.error(err.message ? err.message : err.toString());
 		} finally {
 			isLoading = false;
 		}

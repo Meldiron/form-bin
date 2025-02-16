@@ -3,8 +3,30 @@
 	import { Button } from '$lib/components/ui/button';
 	import { OAuthProvider } from 'appwrite';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import { goto, invalidateAll } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import CircleAlert from 'lucide-svelte/icons/circle-alert';
+	import * as Alert from '$lib/components/ui/alert/index.js';
+
+	let { data } = $props();
 
 	let isLoading = $state(false);
+	let error = $state('');
+
+	onMount(async () => {
+		if (data.secret && data.userId) {
+			isLoading = true;
+			try {
+				await account.createSession(data.userId, data.secret);
+				await invalidateAll();
+				goto('/app');
+			} catch (err: any) {
+				error = err.message ? err.message : err.toString();
+				console.error(err);
+				isLoading = false;
+			}
+		}
+	});
 
 	async function signIn() {
 		isLoading = true;
@@ -51,6 +73,14 @@
 			GitHub
 		</Button>
 	</div>
+
+	{#if error}
+		<Alert.Root variant="destructive">
+			<CircleAlert class="h-4 w-4" />
+			<Alert.Title class="text-primary">Login failed</Alert.Title>
+			<Alert.Description class="text-muted-foreground">{error}</Alert.Description>
+		</Alert.Root>
+	{/if}
 
 	<p class="px-8 text-center text-sm text-muted-foreground">
 		By clicking continue, you agree to our
