@@ -81,8 +81,18 @@
 			<Alert.Description class="text-muted-foreground">{error}</Alert.Description>
 		</Alert.Root>
 	{/if}
-
 </div>
 
-<p class="text-sm flex justify-center items-center text-center mt-12">Made with ❤️ and <a href="https://appwrite.io/" target="_blank"><img src="/appwrite-dark.svg" class="ml-2 h-4 inline hidden dark:block" /> <img src="/appwrite-light.svg" class="ml-2 h-4 inline block dark:hidden" /></a></p>
-<p class="text-center text-sm text-muted-foreground mt-1.5">Source code available on <a href="https://github.com/Meldiron/form-bin" class="underline" target="_blank">GitHub</a></p>
+<p class="mt-12 flex items-center justify-center text-center text-sm">
+	Made with ❤️ and <a href="https://appwrite.io/" target="_blank"
+		><img alt="Appwrite" src="/appwrite-dark.svg" class="ml-2 inline hidden h-4 dark:block" />
+		<img alt="Appwrite" src="/appwrite-light.svg" class="ml-2 block inline h-4 dark:hidden" /></a
+	>
+</p>
+<p class="mt-1.5 text-center text-sm text-muted-foreground">
+	Source code available on <a
+		href="https://github.com/Meldiron/form-bin"
+		class="underline"
+		target="_blank">GitHub</a
+	>
+</p>
