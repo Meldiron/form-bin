@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.ts';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.ts';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card/index.ts';
@@ -7,7 +8,7 @@
 	import { databases, type AppwriteSubmission } from '$lib/appwrite.js';
 	import { Query } from 'appwrite';
 	import { PAGE_LIMIT } from './consts.js';
-	import { LoaderCircle } from 'lucide-svelte';
+	import { LoaderCircle, Trash, Clipboard, Check, Info } from 'lucide-svelte';
 	import { ChevronDown } from 'lucide-svelte';
 
 	let { data } = $props();
@@ -75,6 +76,36 @@
 			openedSubmissions = openedSubmissions.filter((submissionId) => submissionId !== id);
 		}
 	}
+
+	let copied = $state(false);
+	function copyToClipboard(submission: AppwriteSubmission) {
+		let texts = [];
+
+		for (const key of Object.keys(submission.data)) {
+			const value = submission.data[key];
+			texts.push(`${key}:\n${value}`);
+		}
+
+		navigator.clipboard.writeText(texts.join('\n\n'));
+
+		copied = true;
+		setTimeout(() => (copied = false), 1500);
+	}
+
+	let isDeleting = $state(false);
+	async function deleteSubmission(submission: AppwriteSubmission) {
+		isDeleting = true;
+
+		try {
+			await databases.deleteDocument('main', 'submissions', submission.$id);
+			submissions = submissions.filter((s) => s.$id !== submission.$id);
+			toast.success('Submission deleted successfully');
+		} catch (err: any) {
+			toast.error(err.message ? err.message : err.toString());
+		} finally {
+			isDeleting = false;
+		}
+	}
 </script>
 
 <Breadcrumb.Root class="mb-6 flex justify-center">
@@ -104,6 +135,14 @@
 
 			<Card.Content>
 				<div class="flex flex-col gap-4">
+					{#if submissions.length === 0}
+						<Alert.Root>
+							<Info class="h-4 w-4" />
+							<Alert.Title>No submissions</Alert.Title>
+							<Alert.Description>New submissions from your HTML will appear here.</Alert.Description
+							>
+						</Alert.Root>
+					{/if}
 					{#each submissions as submission}
 						<Alert.Root
 							class={`relative overflow-hidden pb-1.5 ${openedSubmissions.includes(submission.$id) ? '' : 'max-h-[80px]'}`}
@@ -115,9 +154,68 @@
 								{#each Object.keys(submission.data) as key}
 									<div>
 										<p class="text-xs text-muted-foreground">{key}:</p>
-										<p class="text-sm text-primary">{submission.data[key]}</p>
+										<div>
+											{#each submission.data[key].split('\r\n') as value}
+												{#if value}
+													<p class="text-sm text-primary">{value}</p>
+												{:else}
+													<div class="h-2"></div>
+												{/if}
+											{/each}
+										</div>
 									</div>
 								{/each}
+
+								<div>
+									<p class="mb-1.5 text-xs text-muted-foreground">actions:</p>
+									<div class="flex items-center gap-2">
+										<Button
+											onclick={() => copyToClipboard(submission)}
+											size="sm"
+											variant="secondary"
+											class=""
+										>
+											{#if copied}
+												<Check class="w-4" />
+											{:else}
+												<Clipboard class="h-4 w-4" />
+											{/if}
+										</Button>
+
+										<AlertDialog.Root>
+											<AlertDialog.Trigger asChild let:builder>
+												<Button
+													disabled={isDeleting}
+													builders={[builder]}
+													size="sm"
+													variant="destructive"
+													class=""
+												>
+													{#if isDeleting}
+														<LoaderCircle class="h-4 w-4 animate-spin" />
+													{:else}
+														<Trash class="h-4 w-4" />
+													{/if}
+												</Button>
+											</AlertDialog.Trigger>
+											<AlertDialog.Content>
+												<AlertDialog.Header>
+													<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+													<AlertDialog.Description>
+														You are about to delete one form's submission. This will delete it
+														permanently.
+													</AlertDialog.Description>
+												</AlertDialog.Header>
+												<AlertDialog.Footer>
+													<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+													<AlertDialog.Action onclick={() => deleteSubmission(submission)}
+														>Continue</AlertDialog.Action
+													>
+												</AlertDialog.Footer>
+											</AlertDialog.Content>
+										</AlertDialog.Root>
+									</div>
+								</div>
 							</div>
 
 							<div

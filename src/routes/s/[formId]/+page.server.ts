@@ -72,14 +72,11 @@ export const actions = {
 		}
 
 		if (form.discordUrl) {
-			let messages = [];
+			const messages: string[] = [];
 
 			for (const key of Object.keys(values)) {
 				const value = values[key];
-
-				const keyVerbose = key.replace(/-/g, ' ').replace(/\b\w/g, (match) => match.toUpperCase());
-
-				messages.push(`**${keyVerbose}:**\n${value}`);
+				messages.push(`**${key}:**\n${value}`);
 			}
 
 			try {
