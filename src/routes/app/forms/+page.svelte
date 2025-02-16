@@ -5,7 +5,7 @@
 	import { LoaderCircle } from 'lucide-svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
-	import { databases } from '$lib/appwrite.js';
+	import { databases } from '$lib/appwrite.ts';
 	import { ID } from 'appwrite';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { toast } from 'svelte-sonner';

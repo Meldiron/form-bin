@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Terminal from 'lucide-svelte/icons/terminal';
-	import * as Alert from '$lib/components/ui/alert/index.js';
+	import * as Alert from '$lib/components/ui/alert/index.ts';
 	import Button from '$lib/components/ui/button/button.svelte';
 
 	let { data } = $props();

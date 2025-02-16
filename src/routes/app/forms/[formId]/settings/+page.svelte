@@ -8,7 +8,7 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
+	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.ts';
 
 	let { data } = $props();
 

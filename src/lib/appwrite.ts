@@ -16,4 +16,6 @@ export type AppwriteForm = {
 
 export type AppwriteSubmission = {
 	values: string; // JSON object
+
+	data: Record<string, any>; // Client-side-only!
 } & Models.Document;

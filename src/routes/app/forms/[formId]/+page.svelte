@@ -1,13 +1,80 @@
 <script lang="ts">
-	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
+	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.ts';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card/index.ts';
+	import * as Alert from '$lib/components/ui/alert/index.ts';
+	import { toast } from 'svelte-sonner';
+	import { databases, type AppwriteSubmission } from '$lib/appwrite.js';
+	import { Query } from 'appwrite';
+	import { PAGE_LIMIT } from './consts.js';
+	import { LoaderCircle } from 'lucide-svelte';
+	import { ChevronDown } from 'lucide-svelte';
 
 	let { data } = $props();
+
+	let submissions = $state(data.submissions.documents);
 
 	let formName = $derived(
 		data.form.name.length <= 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
 	);
+
+	let showLoadMore = $state(submissions.length === PAGE_LIMIT);
+	let isLoading = $state(false);
+	async function loadMore() {
+		isLoading = true;
+
+		try {
+			const lastDoc = submissions[submissions.length - 1];
+			if (!lastDoc) {
+				showLoadMore = false;
+			}
+
+			const newSubmissions = await databases.listDocuments<AppwriteSubmission>(
+				'main',
+				'submissions',
+				[
+					Query.equal('formId', data.form.$id),
+					Query.cursorAfter(lastDoc.$id),
+					Query.limit(PAGE_LIMIT)
+				]
+			);
+
+			if (newSubmissions.documents.length !== PAGE_LIMIT) {
+				showLoadMore = false;
+			}
+
+			for (const submission of newSubmissions.documents) {
+				submission.data = JSON.parse(submission.values);
+			}
+
+			submissions.push(...newSubmissions.documents);
+		} catch (err: any) {
+			toast.error(err.message ? err.message : err.toString());
+		} finally {
+			isLoading = false;
+		}
+	}
+
+	function getDate(date: string): string {
+		const dateObj = new Date(date);
+		const options: Intl.DateTimeFormatOptions = {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: 'numeric',
+			minute: 'numeric'
+		};
+		return dateObj.toLocaleDateString(undefined, options);
+	}
+
+	let openedSubmissions: string[] = $state([]);
+	function toggleSubmission(id: string) {
+		if (!openedSubmissions.includes(id)) {
+			openedSubmissions.push(id);
+		} else {
+			openedSubmissions = openedSubmissions.filter((submissionId) => submissionId !== id);
+		}
+	}
 </script>
 
 <Breadcrumb.Root class="mb-6 flex justify-center">
@@ -31,12 +98,52 @@
 	<div class="w-full flex-col justify-center space-y-6">
 		<Card.Root>
 			<Card.Header>
-				<Card.Title>Submission</Card.Title>
+				<Card.Title>Submissions</Card.Title>
 				<Card.Description>Record of all values from submissions.</Card.Description>
 			</Card.Header>
 
 			<Card.Content>
-				<p>aa</p>
+				<div class="flex flex-col gap-4">
+					{#each submissions as submission}
+						<Alert.Root
+							class={`relative overflow-hidden pb-1.5 ${openedSubmissions.includes(submission.$id) ? '' : 'max-h-[80px]'}`}
+						>
+							<Alert.Title class="mb-4 text-xs font-light uppercase"
+								>{getDate(submission.$createdAt)}</Alert.Title
+							>
+							<div class="flex flex-col gap-4">
+								{#each Object.keys(submission.data) as key}
+									<div>
+										<p class="text-xs text-muted-foreground">{key}:</p>
+										<p class="text-sm text-primary">{submission.data[key]}</p>
+									</div>
+								{/each}
+							</div>
+
+							<div
+								class={`${openedSubmissions.includes(submission.$id) ? '' : 'absolute bottom-0 left-0 h-8'}  flex w-full justify-center bg-gradient-to-t from-background to-background/25`}
+							>
+								<div class="">
+									<Button onclick={() => toggleSubmission(submission.$id)} variant="link" class="">
+										<ChevronDown
+											class={`h-4 w-4 ${openedSubmissions.includes(submission.$id) ? 'rotate-180' : ''}`}
+										/>
+									</Button>
+								</div>
+							</div>
+						</Alert.Root>
+					{/each}
+				</div>
+
+				{#if showLoadMore}
+					<Button disabled={isLoading} onclick={loadMore} variant="secondary" class="mt-4 w-full">
+						{#if isLoading}
+							<LoaderCircle class="h-4 w-4 animate-spin" />
+						{:else}
+							<span>Load more</span>
+						{/if}
+					</Button>
+				{/if}
 			</Card.Content>
 		</Card.Root>
 	</div>

@@ -6,7 +6,7 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import CircleAlert from 'lucide-svelte/icons/circle-alert';
-	import * as Alert from '$lib/components/ui/alert/index.js';
+	import * as Alert from '$lib/components/ui/alert/index.ts';
 
 	let { data } = $props();
 
