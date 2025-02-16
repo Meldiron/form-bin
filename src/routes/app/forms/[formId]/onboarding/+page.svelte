@@ -10,8 +10,13 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
+	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 
 	let { data } = $props();
+
+	let formName = $derived(
+		data.form.name.length > 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
+	);
 
 	let text = `<form
   action="https:/formbin.vercel.app/s/${data.form.$id}"
@@ -83,12 +88,22 @@
 	}
 </script>
 
+<Breadcrumb.Root class="mb-6 flex justify-center">
+	<Breadcrumb.List>
+		<Breadcrumb.Item>
+			<Breadcrumb.Link href="/app/forms">Forms</Breadcrumb.Link>
+		</Breadcrumb.Item>
+		<Breadcrumb.Separator />
+		<Breadcrumb.Item>
+			<Breadcrumb.Link href={`/app/forms/${data.form.$id}`}>{formName}</Breadcrumb.Link>
+		</Breadcrumb.Item>
+	</Breadcrumb.List>
+</Breadcrumb.Root>
+
 <div class="w-full flex-col justify-center space-y-6">
 	<div class="flex flex-col space-y-2 text-center">
-		<h1 class="text-2xl font-semibold tracking-tight">Let’s setup your form</h1>
-		<p class="text-sm text-muted-foreground">
-			Follow below steps of onboarding to connect your HTML form
-		</p>
+		<h1 class="text-2xl font-semibold tracking-tight">{data.form.name}</h1>
+		<p class="text-sm text-muted-foreground">Let’s setup your form</p>
 	</div>
 
 	<div class="flex flex-col space-y-6">
@@ -181,29 +196,35 @@
 				<Card.Description>Fill inputs on your website, and submit the form.</Card.Description>
 			</Card.Header>
 			<Card.Content class="space-y-2">
-				<div class="col-span-6 grid gap-3 sm:grid-cols-12">
-					<Button
-						disabled={isSkipping}
-						onclick={skip}
-						type="button"
-						variant="secondary"
-						class="col-span-6 w-full"
-					>
-						{#if isSkipping}
-							<LoaderCircle class="h-4 w-4 animate-spin" />
-						{:else}
-							<span>Skip</span>
-						{/if}
-					</Button>
+				{#if !data.visitor}
+					<div class="col-span-6 grid gap-3 sm:grid-cols-12">
+						<Button
+							disabled={isSkipping}
+							onclick={skip}
+							type="button"
+							variant="secondary"
+							class="col-span-6 w-full"
+						>
+							{#if isSkipping}
+								<LoaderCircle class="h-4 w-4 animate-spin" />
+							{:else}
+								<span>Skip</span>
+							{/if}
+						</Button>
 
-					<Button onclick={check} disabled={isChecking} type="button" class="col-span-6 w-full">
-						{#if isChecking}
-							<LoaderCircle class="h-4 w-4 animate-spin" />
-						{:else}
-							<span>Check</span>
-						{/if}
-					</Button>
-				</div>
+						<Button onclick={check} disabled={isChecking} type="button" class="col-span-6 w-full">
+							{#if isChecking}
+								<LoaderCircle class="h-4 w-4 animate-spin" />
+							{:else}
+								<span>Check</span>
+							{/if}
+						</Button>
+					</div>
+				{:else}
+					<a class="w-full" href={`/app/forms/${data.form.$id}`}>
+						<Button type="button" class="w-full">View submission</Button>
+					</a>
+				{/if}
 			</Card.Content>
 		</Card.Root>
 	</div>

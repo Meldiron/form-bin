@@ -1,6 +1,16 @@
 # FormBin
 
-TODO: @Meldiron Write
+Simple and powerful backend for your HTML forms.
+
+Visit [FormBin](https://formbin.net) to register, setup a form, and start collecting submissions.
+
+Features:
+
+- GitHub OAuth2 login
+- Simple form creation
+- Onboarding to connect HTML form
+- Discord webhook automation
+- Visual submissions database
 
 ## Contributing
 

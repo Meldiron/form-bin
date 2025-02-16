@@ -22,12 +22,12 @@
 		isLoading = true;
 
 		try {
-			await databases.createDocument('main', 'forms', ID.unique(), {
+			const form = await databases.createDocument('main', 'forms', ID.unique(), {
 				name: name,
 				returnUrl: returnUrl
 			});
 			await invalidateAll();
-			goto(`/app/forms/${data.forms.documents[0].$id}`);
+			goto(`/app/forms/${form.$id}`);
 			toast.success('Form successfully created.');
 		} catch (err: any) {
 			toast.error(err.message ? err.message : err.toString());
@@ -53,7 +53,7 @@
 
 	<div class="grid grid-cols-12 gap-4">
 		{#each data.forms.documents as form}
-			<a href={`/app/forms/${form.$id}`} class="col-span-6 w-full">
+			<a href={`/app/forms/${form.$id}`} class="col-span-12 w-full sm:col-span-6">
 				<Card.Root class="w-full hover:border-muted-foreground">
 					<Card.Header>
 						<Card.Title class="text-sm font-medium">
@@ -64,7 +64,9 @@
 					</Card.Header>
 					<Card.Content class="-mt-2">
 						<div class="line-clamp-1 text-2xl font-bold">{form.name}</div>
-						<p class="mt-1.5 text-xs text-muted-foreground">{form.submissions} total submissions</p>
+						<p class="mt-1.5 text-xs text-muted-foreground">
+							{data.submissions[form.$id]} total submissions
+						</p>
 					</Card.Content>
 				</Card.Root>
 			</a>
@@ -72,7 +74,9 @@
 
 		<AlertDialog.Root>
 			<AlertDialog.Trigger
-				class={data.forms.total === 0 || data.forms.total % 2 === 0 ? 'col-span-12' : 'col-span-6'}
+				class={data.forms.total === 0 || data.forms.total % 2 === 0
+					? 'col-span-12'
+					: 'col-span-12 sm:col-span-6'}
 			>
 				<button type="button" class="w-full">
 					<Card.Root class="group w-full hover:border-muted-foreground">

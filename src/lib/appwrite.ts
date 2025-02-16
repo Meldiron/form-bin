@@ -10,7 +10,10 @@ export const databases = new Databases(client);
 export type AppwriteForm = {
 	name: string;
 	returnUrl: string;
-	submissions: number;
 	pinged: boolean;
 	discordUrl: string;
+} & Models.Document;
+
+export type AppwriteSubmission = {
+	values: string; // JSON object
 } & Models.Document;

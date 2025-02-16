@@ -1,0 +1,119 @@
+{
+	"projectId": "form-bin",
+	"projectName": "Form Bin",
+	"settings": {
+		"services": {
+			"account": true,
+			"avatars": true,
+			"databases": true,
+			"locale": true,
+			"health": true,
+			"storage": true,
+			"teams": true,
+			"users": true,
+			"functions": true,
+			"graphql": true,
+			"messaging": true
+		},
+		"auth": {
+			"methods": {
+				"jwt": true,
+				"phone": true,
+				"invites": true,
+				"anonymous": true,
+				"email-otp": true,
+				"magic-url": true,
+				"email-password": true
+			},
+			"security": {
+				"duration": 31536000,
+				"limit": 0,
+				"sessionsLimit": 10,
+				"passwordHistory": 0,
+				"passwordDictionary": false,
+				"personalDataCheck": false,
+				"sessionAlerts": false,
+				"mockNumbers": []
+			}
+		}
+	},
+	"functions": [],
+	"databases": [
+		{
+			"$id": "main",
+			"name": "main",
+			"enabled": true
+		}
+	],
+	"collections": [
+		{
+			"$id": "forms",
+			"$permissions": ["create(\"users\")"],
+			"databaseId": "main",
+			"name": "forms",
+			"enabled": true,
+			"documentSecurity": true,
+			"attributes": [
+				{
+					"key": "name",
+					"type": "string",
+					"required": true,
+					"array": false,
+					"size": 32,
+					"default": null
+				},
+				{
+					"key": "returnUrl",
+					"type": "string",
+					"required": true,
+					"array": false,
+					"format": "url",
+					"default": null
+				},
+				{
+					"key": "pinged",
+					"type": "boolean",
+					"required": false,
+					"array": false,
+					"default": false
+				},
+				{
+					"key": "discordUrl",
+					"type": "string",
+					"required": false,
+					"array": false,
+					"format": "url",
+					"default": null
+				}
+			],
+			"indexes": []
+		},
+		{
+			"$id": "submissions",
+			"$permissions": [],
+			"databaseId": "main",
+			"name": "submissions",
+			"enabled": true,
+			"documentSecurity": true,
+			"attributes": [
+				{
+					"key": "formId",
+					"type": "string",
+					"required": true,
+					"array": false,
+					"size": 255,
+					"default": null
+				},
+				{
+					"key": "valus",
+					"type": "string",
+					"required": true,
+					"array": false,
+					"size": 1000000,
+					"default": null
+				}
+			],
+			"indexes": []
+		}
+	]
+}

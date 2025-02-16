@@ -14,9 +14,6 @@ importers:
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
-      lucide-svelte:
-        specifier: ^0.475.0
-        version: 0.475.0(svelte@5.20.1)
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.5
@@ -57,6 +54,9 @@ importers:
       globals:
         specifier: ^15.14.0
         version: 15.15.0
+      lucide-svelte:
+        specifier: ^0.475.0
+        version: 0.475.0(svelte@5.20.1)
       mode-watcher:
         specifier: ^0.5.1
         version: 0.5.1(svelte@5.20.1)
