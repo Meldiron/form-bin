@@ -19,7 +19,7 @@
 	);
 
 	let text = `<form
-  action="https:/formbin.vercel.app/s/${data.form.$id}"
+  action="https://formbin.vercel.app/s/${data.form.$id}"
   method="POST"
   enctype="multipart/form-data"
 >
@@ -35,7 +35,7 @@
 </form>`;
 
 	let existing2 = `<form
- action="https:/formbin.vercel.app/s/${data.form.$id}"
+ action="https://formbin.vercel.app/s/${data.form.$id}"
   method="POST"
   enctype="multipart/form-data"
 >
