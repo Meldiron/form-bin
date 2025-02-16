@@ -82,22 +82,7 @@
 		</Alert.Root>
 	{/if}
 
-	<p class="px-8 text-center text-sm text-muted-foreground">
-		By clicking continue, you agree to our
-		<a
-			href="https://appwrite.io/terms"
-			target="_blank"
-			class="underline underline-offset-4 hover:text-primary"
-		>
-			Terms of Service
-		</a>
-		and
-		<a
-			href="https://appwrite.io/privacy"
-			target="_blank"
-			class="underline underline-offset-4 hover:text-primary"
-		>
-			Privacy Policy
-		</a>
-	</p>
 </div>
+
+<p class="text-sm flex justify-center items-center text-center mt-12">Made with ❤️ and <a href="https://appwrite.io/" target="_blank"><img src="/appwrite-dark.svg" class="ml-2 h-4 inline hidden dark:block" /> <img src="/appwrite-light.svg" class="ml-2 h-4 inline block dark:hidden" /></a></p>
+<p class="text-center text-sm text-muted-foreground mt-1.5">Source code available on <a href="https://github.com/Meldiron/form-bin" class="underline" target="_blank">GitHub</a></p>
