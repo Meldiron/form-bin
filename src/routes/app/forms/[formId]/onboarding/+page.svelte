@@ -48,6 +48,8 @@
 
 	let existing3 = `<input name="sender" />`;
 
+	let existing4 = `<button type="submit">Send</button>`;
+
 	function copyToClipboard() {
 		navigator.clipboard.writeText(text);
 		copied = true;
@@ -205,6 +207,13 @@
 									<p class="text-sm font-medium leading-none">3. Ensure all inputs have names</p>
 									<div class="w-full max-w-full overflow-x-auto rounded-lg">
 										<pre class="text-xs"><code class="language-html">{existing3}</code></pre>
+									</div>
+								</div>
+
+								<div class="space-y-2">
+									<p class="text-sm font-medium leading-none">4. Have one button of submit type</p>
+									<div class="w-full max-w-full overflow-x-auto rounded-lg">
+										<pre class="text-xs"><code class="language-html">{existing4}</code></pre>
 									</div>
 								</div>
 							</Card.Content>

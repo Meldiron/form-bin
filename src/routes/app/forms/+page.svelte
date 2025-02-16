@@ -5,7 +5,7 @@
 	import { LoaderCircle } from 'lucide-svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
-	import { databases } from '$lib/appwrite.ts';
+	import { databases, helperForUrl } from '$lib/appwrite.ts';
 	import { ID } from 'appwrite';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
@@ -24,7 +24,7 @@
 		try {
 			const form = await databases.createDocument('main', 'forms', ID.unique(), {
 				name: name,
-				returnUrl: returnUrl
+				returnUrl: helperForUrl(returnUrl)
 			});
 			await invalidateAll();
 			goto(`/app/forms/${form.$id}`);

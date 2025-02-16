@@ -19,3 +19,15 @@ export type AppwriteSubmission = {
 
 	data: Record<string, any>; // Client-side-only!
 } & Models.Document;
+
+export function helperForUrl(url: string) {
+	if (!url.startsWith('http://') && !url.startsWith('https://')) {
+		url = `https://${url}`;
+	}
+
+	if (!url.split('//')[1].includes('/')) {
+		url = `${url}/`;
+	}
+
+	return url;
+}

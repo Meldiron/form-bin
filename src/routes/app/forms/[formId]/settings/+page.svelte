@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import { databases } from '$lib/appwrite';
+	import { databases, helperForUrl } from '$lib/appwrite';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.ts';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card/index.ts';
@@ -21,7 +21,7 @@
 		try {
 			await databases.updateDocument('main', 'forms', data.form.$id, {
 				name: data.form.name,
-				returnUrl: data.form.returnUrl
+				returnUrl: helperForUrl(data.form.returnUrl)
 			});
 			await invalidateAll();
 			toast.success('Form successfully updated.');
