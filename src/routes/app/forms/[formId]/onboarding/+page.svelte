@@ -15,7 +15,7 @@
 	let { data } = $props();
 
 	let formName = $derived(
-		data.form.name.length > 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
+		data.form.name.length <= 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
 	);
 
 	let text = `<form

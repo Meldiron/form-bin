@@ -35,18 +35,15 @@
 	let isDeleting = $state(false);
 	async function deleteForm() {
 		isDeleting = true;
-		if (confirm('Are you sure you want to delete form "' + data.form.name + '"?')) {
-			try {
-				await databases.deleteDocument('main', 'forms', data.form.$id);
-				await invalidateAll();
-				goto('/app/forms');
-				toast.success('Form successfully deleted.');
-			} catch (err: any) {
-				toast.error(err.message ? err.message : err.toString());
-			} finally {
-				isDeleting = false;
-			}
-		} else {
+
+		try {
+			await databases.deleteDocument('main', 'forms', data.form.$id);
+			await invalidateAll();
+			goto('/app/forms');
+			toast.success('Form successfully deleted.');
+		} catch (err: any) {
+			toast.error(err.message ? err.message : err.toString());
+		} finally {
 			isDeleting = false;
 		}
 	}
@@ -69,7 +66,7 @@
 	}
 
 	let formName = $derived(
-		data.form.name.length > 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
+		data.form.name.length <= 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
 	);
 </script>
 
@@ -187,19 +184,35 @@
 			</Card.Header>
 
 			<Card.Footer class="mt-4">
-				<Button
-					disabled={isDeleting}
-					onclick={deleteForm}
-					type="button"
-					variant="destructive"
-					class="w-full"
-				>
-					{#if isDeleting}
-						<LoaderCircle class="h-4 w-4 animate-spin" />
-					{:else}
-						<span>Delete</span>
-					{/if}
-				</Button>
+				<AlertDialog.Root>
+					<AlertDialog.Trigger asChild let:builder>
+						<Button
+							builders={[builder]}
+							disabled={isDeleting}
+							type="button"
+							variant="destructive"
+							class="w-full"
+						>
+							{#if isDeleting}
+								<LoaderCircle class="h-4 w-4 animate-spin" />
+							{:else}
+								<span>Delete</span>
+							{/if}
+						</Button>
+					</AlertDialog.Trigger>
+					<AlertDialog.Content>
+						<AlertDialog.Header>
+							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+							<AlertDialog.Description>
+								You are about to delete form and it's submissions. This will delete it permanently.
+							</AlertDialog.Description>
+						</AlertDialog.Header>
+						<AlertDialog.Footer>
+							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+							<AlertDialog.Action onclick={deleteForm}>Continue</AlertDialog.Action>
+						</AlertDialog.Footer>
+					</AlertDialog.Content>
+				</AlertDialog.Root>
 			</Card.Footer>
 		</Card.Root>
 	</div>

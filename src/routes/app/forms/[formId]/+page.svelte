@@ -6,7 +6,7 @@
 	let { data } = $props();
 
 	let formName = $derived(
-		data.form.name.length > 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
+		data.form.name.length <= 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
 	);
 </script>
 
@@ -44,13 +44,13 @@
 	<div class="w-full flex-col justify-center space-y-6">
 		<Card.Root>
 			<Card.Header>
-				<Card.Title>Form configuration</Card.Title>
-				<Card.Description>Manage, delete, and integrate your form.</Card.Description>
+				<Card.Title>Form onboarding</Card.Title>
+				<Card.Description>Revisit onboarding to obtain HTML form snippets.</Card.Description>
 			</Card.Header>
 
 			<Card.Footer class="mt-4">
-				<a class="w-full" href={`/app/forms/${data.form.$id}/settings`}>
-					<Button type="button" variant="outline" class="w-full">Open settings</Button>
+				<a class="w-full" href={`/app/forms/${data.form.$id}/onboarding?visitor`}>
+					<Button type="button" variant="outline" class="w-full">Visit onboarding</Button>
 				</a>
 			</Card.Footer>
 		</Card.Root>
@@ -59,13 +59,13 @@
 	<div class="w-full flex-col justify-center space-y-6">
 		<Card.Root>
 			<Card.Header>
-				<Card.Title>Form onboarding</Card.Title>
-				<Card.Description>Revisit onboarding to obtain HTML form snippets.</Card.Description>
+				<Card.Title>Form configuration</Card.Title>
+				<Card.Description>Manage, delete, and integrate your form.</Card.Description>
 			</Card.Header>
 
 			<Card.Footer class="mt-4">
-				<a class="w-full" href={`/app/forms/${data.form.$id}/onboarding?visitor`}>
-					<Button type="button" variant="outline" class="w-full">Visit onboarding</Button>
+				<a class="w-full" href={`/app/forms/${data.form.$id}/settings`}>
+					<Button type="button" variant="outline" class="w-full">Open settings</Button>
 				</a>
 			</Card.Footer>
 		</Card.Root>
