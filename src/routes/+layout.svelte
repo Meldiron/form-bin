@@ -40,9 +40,15 @@
 	</div>
 </nav>
 
-<main class="mx-auto mt-10 max-w-xl px-4">
-	{@render children()}
-</main>
+{#if window.location.pathname === '/'}
+	<main class="mx-auto mt-10 max-w-3xl px-4">
+		{@render children()}
+	</main>
+{:else}
+	<main class="mx-auto mt-10 max-w-xl px-4">
+		{@render children()}
+	</main>
+{/if}
 
 <Toaster />
 <ModeWatcher />

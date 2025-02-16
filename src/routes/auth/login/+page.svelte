@@ -82,17 +82,3 @@
 		</Alert.Root>
 	{/if}
 </div>
-
-<p class="mt-12 flex items-center justify-center text-center text-sm">
-	Made with ❤️ and <a href="https://appwrite.io/" target="_blank"
-		><img alt="Appwrite" src="/appwrite-dark.svg" class="ml-2 inline hidden h-4 dark:block" />
-		<img alt="Appwrite" src="/appwrite-light.svg" class="ml-2 block inline h-4 dark:hidden" /></a
-	>
-</p>
-<p class="mt-1.5 text-center text-sm text-muted-foreground">
-	Source code available on <a
-		href="https://github.com/Meldiron/form-bin"
-		class="underline"
-		target="_blank">GitHub</a
-	>
-</p>
