@@ -6,6 +6,7 @@ export const ssr = false;
 
 export const load: PageLoad = async () => {
 	const forms = await databases.listDocuments<AppwriteForm>('main', 'forms', [
+		Query.orderDesc('$id'),
 		Query.limit(25) // TODO: @Meldiron Pagination
 	]);
 
