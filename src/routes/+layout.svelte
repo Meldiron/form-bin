@@ -7,6 +7,7 @@
 
 	import { toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { page } from '$app/state';
 
 	let { data, children } = $props();
 </script>
@@ -40,7 +41,7 @@
 	</div>
 </nav>
 
-{#if window.location.pathname === '/'}
+{#if page.url.pathname === '/'}
 	<main class="mx-auto mt-10 max-w-3xl px-4">
 		{@render children()}
 	</main>
