@@ -14,6 +14,7 @@ export const load: PageLoad = async ({ parent, params }: any) => {
 	}
 
 	const submissions = await databases.listDocuments<AppwriteSubmission>('main', 'submissions', [
+		Query.orderDesc('$id'),
 		Query.equal('formId', params.formId),
 		Query.limit(PAGE_LIMIT)
 	]);

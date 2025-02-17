@@ -34,6 +34,7 @@
 				'main',
 				'submissions',
 				[
+					Query.orderDesc('$id'),
 					Query.equal('formId', data.form.$id),
 					Query.cursorAfter(lastDoc.$id),
 					Query.limit(PAGE_LIMIT)
