@@ -28,6 +28,19 @@
 		}
 	});
 
+	let isLoadingGuest = $state(false);
+	async function continueAsGuest() {
+		isLoadingGuest = true;
+		try {
+			await account.createAnonymousSession();
+			await invalidateAll();
+			goto('/app');
+		} catch (err: any) {
+			error = err.message ? err.message : err.toString();
+			isLoadingGuest = false;
+		}
+	}
+
 	async function signIn() {
 		isLoading = true;
 		await account.createOAuth2Token(
@@ -71,6 +84,21 @@
 				</svg>
 			{/if}
 			GitHub
+		</Button>
+	</div>
+
+	<div class="flex w-full justify-center">
+		<Button
+			onclick={continueAsGuest}
+			class="w-full max-w-sm"
+			variant="outline"
+			type="button"
+			disabled={isLoadingGuest}
+		>
+			{#if isLoadingGuest}
+				<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+			{/if}
+			Continue as Guest
 		</Button>
 	</div>
 
