@@ -2,7 +2,7 @@
 
 Simple and powerful backend for your HTML forms.
 
-Visit [FormBin](https://formbin.net) to register, setup a form, and start collecting submissions.
+Visit [FormBin](https://formbin.almostapps.eu/) to register, setup a form, and start collecting submissions.
 
 Features:
 
