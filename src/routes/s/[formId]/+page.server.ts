@@ -42,8 +42,38 @@ export const actions = {
 
 		const values: Record<string, unknown> = {};
 
+		let contents: string = '';
 		for (const key of data.keys()) {
 			values[key] = data.get(key);
+			contents += key + ' ' + data.get(key) + ' ';
+		}
+
+		if (form.stopForumSpam) {
+			function extractValues(xml: string, tagName: string) {
+				const regex = new RegExp(`<${tagName}>(.*?)<\/${tagName}>`);
+				const match = xml.match(regex);
+				return match ? match[1] : null;
+			}
+
+			const regex = /\S+[a-z0-9]@[a-z0-9\.]+/gim;
+			const emails = contents.match(regex) ?? [];
+
+			let spam = false;
+			for (const email of emails.filter((_email, index) => index < 5)) {
+				const response = await fetch('https://api.stopforumspam.org/api?email=' + email);
+				const responseBody = await response.text();
+				const appears = (extractValues(responseBody, 'appears') ?? '') === 'yes';
+				const frequency = +(extractValues(responseBody, 'frequency') ?? '0');
+
+				if (appears && frequency > 0) {
+					spam = true;
+					break;
+				}
+			}
+
+			if (spam) {
+				throw redirect(302, `/s/${formId}?msg=Your submission was filtered out as a spam.`);
+			}
 		}
 
 		const json = JSON.stringify(values);

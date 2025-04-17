@@ -84,6 +84,13 @@
 					"array": false,
 					"format": "url",
 					"default": null
+				},
+				{
+					"key": "stopForumSpam",
+					"type": "boolean",
+					"required": false,
+					"array": false,
+					"default": false
 				}
 			],
 			"indexes": []
@@ -105,12 +112,12 @@
 					"default": null
 				},
 				{
-					"key": "valus",
+					"key": "values",
 					"type": "string",
-					"required": true,
+					"required": false,
 					"array": false,
 					"size": 1000000,
-					"default": null
+					"default": "{}"
 				}
 			],
 			"indexes": []

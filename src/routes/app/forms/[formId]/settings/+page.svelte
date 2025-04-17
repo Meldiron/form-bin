@@ -9,6 +9,7 @@
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.ts';
+	import Switch from '$lib/components/ui/switch/switch.svelte';
 
 	let { data } = $props();
 
@@ -62,6 +63,23 @@
 			toast.error(err.message ? err.message : err.toString());
 		} finally {
 			isIntegrating = false;
+		}
+	}
+
+	let isAntiSpamSaving = $state(false);
+	async function onAntiSpamSave() {
+		isAntiSpamSaving = true;
+
+		try {
+			await databases.updateDocument('main', 'forms', data.form.$id, {
+				stopForumSpam: data.form.stopForumSpam
+			});
+			await invalidateAll();
+			toast.success('Anti spam saved.');
+		} catch (err: any) {
+			toast.error(err.message ? err.message : err.toString());
+		} finally {
+			isAntiSpamSaving = false;
 		}
 	}
 
@@ -124,6 +142,43 @@
 
 					<Button disabled={isLoading} type="submit" class="w-full">
 						{#if isLoading}
+							<LoaderCircle class="h-4 w-4 animate-spin" />
+						{:else}
+							<span>Update</span>
+						{/if}
+					</Button>
+				</form>
+			</Card.Footer>
+		</Card.Root>
+
+		<Card.Root class="border-orange-500">
+			<Card.Header>
+				<Card.Title>Anti-span protection</Card.Title>
+				<Card.Description>Tools to ignore unwanted submissions.</Card.Description>
+			</Card.Header>
+
+			<Card.Footer class="mt-4">
+				<form onsubmit={onAntiSpamSave} class="mx-auto flex w-full flex-col gap-4">
+					<div class="flex flex-row items-center justify-between rounded-lg border p-4">
+						<div class="space-y-0.5">
+							<Label>Stop Forum Spam</Label>
+							<Card.Description>
+								If any form value includes email address from <a
+									class="text-orange-500"
+									href="https://www.stopforumspam.com/"
+									target="_blank">stopforumspam.com</a
+								> database, it will be ignored.
+							</Card.Description>
+						</div>
+						<Switch bind:checked={data.form.stopForumSpam} />
+					</div>
+
+					<Button
+						class="w-full bg-orange-500 text-white hover:bg-orange-600 hover:bg-opacity-90"
+						disabled={isAntiSpamSaving}
+						type="submit"
+					>
+						{#if isAntiSpamSaving}
 							<LoaderCircle class="h-4 w-4 animate-spin" />
 						{:else}
 							<span>Update</span>

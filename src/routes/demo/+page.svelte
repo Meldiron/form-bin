@@ -14,8 +14,6 @@
 		isLoading = true;
 		// Default behaviour takes care of the rest
 	}
-
-	const formId = '67b1b4f7001e867f2dc3';
 </script>
 
 <div class="w-full flex-col justify-center space-y-6">
