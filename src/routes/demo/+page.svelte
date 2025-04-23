@@ -22,6 +22,11 @@
 		<p class="text-sm text-muted-foreground">Send us a message to experience form submission</p>
 	</div>
 
+	<!--
+	Demo: 67b1b4f7001e867f2dc3
+    Personal: 67b1fb59002fe3c932ff
+	-->
+
 	<form
 		onsubmit={onSubmit}
 		action={window.location.origin + '/s/67b1b4f7001e867f2dc3'}
@@ -51,6 +56,13 @@
 				placeholder="Type something. Anything. Tell us a joke."
 			/>
 		</div>
+
+		<!--
+		<div>
+			<cap-widget data-cap-api-endpoint="http://localhost:5173/captcha/"></cap-widget>
+			<script src="https://cdn.jsdelivr.net/npm/@cap.js/widget"></script>
+		</div>
+		-->
 
 		<div class="w-full">
 			<Button type="submit" class="w-full">

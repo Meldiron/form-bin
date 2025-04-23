@@ -1,4 +1,10 @@
 <script lang="ts">
+	import hljs from 'highlight.js';
+	import { onMount } from 'svelte';
+	import * as Select from '$lib/components/ui/select/index.js';
+	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import TriangleAlert from 'lucide-svelte/icons/triangle-alert';
+	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { databases, helperForUrl } from '$lib/appwrite';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.ts';
@@ -72,7 +78,8 @@
 
 		try {
 			await databases.updateDocument('main', 'forms', data.form.$id, {
-				stopForumSpam: data.form.stopForumSpam
+				stopForumSpam: data.form.stopForumSpam,
+				captcha2: data.form.captcha2
 			});
 			await invalidateAll();
 			toast.success('Anti spam saved.');
@@ -82,6 +89,34 @@
 			isAntiSpamSaving = false;
 		}
 	}
+
+	let captchaModalOpened = $state(false);
+	$effect(() => {
+		if (captchaModalOpened !== undefined) {
+			hljs.highlightAll();
+		}
+	});
+	let escapedScript = 'script';
+	let captchaCode1 = `<html>
+  <head>
+    ...
+  </head>
+  <body>
+    ...
+    
+    <script src="https://cdn.jsdelivr.net/npm/@cap.js/widget"></${escapedScript}>
+  </body>
+</html>`;
+
+	let captchaCode2 = `<form ...>
+  ...
+  
+  <cap-widget
+    data-cap-api-endpoint="http://formbin.almostapps.eu/captcha/"
+  ></cap-widget>
+  
+  ...
+</form>`;
 
 	let formName = $derived(
 		data.form.name.length <= 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
@@ -153,7 +188,7 @@
 
 		<Card.Root class="border-orange-500">
 			<Card.Header>
-				<Card.Title>Anti-span protection</Card.Title>
+				<Card.Title>Anti-spam protection</Card.Title>
 				<Card.Description>Tools to ignore unwanted submissions.</Card.Description>
 			</Card.Header>
 
@@ -171,6 +206,59 @@
 							</Card.Description>
 						</div>
 						<Switch bind:checked={data.form.stopForumSpam} />
+					</div>
+					<div class="rounded-lg border p-4">
+						<div class="flex flex-row items-center justify-between">
+							<div class="space-y-0.5">
+								<Label>Proof-of-work captcha</Label>
+								<Card.Description>
+									"I'm a human" integration powered by <a
+										class="text-orange-500"
+										href="https://capjs.js.org/"
+										target="_blank">Cap</a
+									> to reduce spam by making it costly.
+								</Card.Description>
+							</div>
+
+							<Switch bind:checked={data.form.captcha2} />
+						</div>
+
+						{#if data.form.captcha2 === true}
+							<Alert.Root class="mt-4">
+								<TriangleAlert class="h-4 w-4" />
+								<Alert.Title>Integration required!</Alert.Title>
+								<Alert.Description
+									>You need to include Cap input in your form.
+
+									<Dialog.Root bind:open={captchaModalOpened}>
+										<Dialog.Trigger class="text-orange-500">Learn more</Dialog.Trigger>
+										<Dialog.Content class="sm:max-w-[600px]">
+											<Dialog.Header>
+												<Dialog.Title>Captcha integration</Dialog.Title>
+											</Dialog.Header>
+											<p>1. Import Cap widget library</p>
+											<div class="w-full max-w-full overflow-x-auto rounded-lg">
+												<pre class="text-xs"><code class="language-html">{captchaCode1}</code></pre>
+											</div>
+
+											<hr />
+
+											<p>2. Add Cap widget</p>
+											<div class="w-full max-w-full overflow-x-auto rounded-lg">
+												<pre class="text-xs"><code class="language-html">{captchaCode2}</code></pre>
+											</div>
+											<Dialog.Footer>
+												<Button
+													variant="secondary"
+													type="button"
+													on:click={() => (captchaModalOpened = false)}>Close</Button
+												>
+											</Dialog.Footer>
+										</Dialog.Content>
+									</Dialog.Root>
+								</Alert.Description>
+							</Alert.Root>
+						{/if}
 					</div>
 
 					<Button

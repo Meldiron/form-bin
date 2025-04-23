@@ -91,6 +91,22 @@
 					"required": false,
 					"array": false,
 					"default": false
+				},
+				{
+					"key": "captcha",
+					"type": "string",
+					"required": false,
+					"array": false,
+					"elements": ["none", "low", "medium", "high"],
+					"format": "enum",
+					"default": "none"
+				},
+				{
+					"key": "captcha2",
+					"type": "boolean",
+					"required": false,
+					"array": false,
+					"default": false
 				}
 			],
 			"indexes": []

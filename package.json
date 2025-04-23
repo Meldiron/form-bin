@@ -46,6 +46,7 @@
 		"zod": "^3.24.2"
 	},
 	"dependencies": {
+		"@cap.js/server": "^1.0.8",
 		"appwrite": "^17.0.0",
 		"highlight.js": "^11.11.1",
 		"node-appwrite": "^15.0.0"
