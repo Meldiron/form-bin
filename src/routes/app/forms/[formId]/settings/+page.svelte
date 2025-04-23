@@ -112,7 +112,7 @@
   ...
   
   <cap-widget
-    data-cap-api-endpoint="http://formbin.almostapps.eu/captcha/"
+    data-cap-api-endpoint="https://formbin.almostapps.eu/captcha/"
   ></cap-widget>
   
   ...
