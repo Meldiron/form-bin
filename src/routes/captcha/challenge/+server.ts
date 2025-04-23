@@ -3,7 +3,7 @@ import { cap } from '$lib/captcha';
 
 export async function POST() {
 	const challenge = cap.createChallenge({
-		challengeCount: 32,
+		challengeCount: 16,
 		challengeSize: 32,
 		challengeDifficulty: 4,
 		expiresMs: 600000
