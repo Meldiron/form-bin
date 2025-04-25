@@ -29,7 +29,7 @@
 
 	<form
 		onsubmit={onSubmit}
-		action={window.location.origin + '/s/67b1b4f7001e867f2dc3'}
+		action={window.location.origin + '/s/67b1fb59002fe3c932ff'}
 		method="POST"
 		enctype="multipart/form-data"
 		class="mx-auto flex w-full max-w-sm flex-col gap-4"
@@ -57,12 +57,11 @@
 			/>
 		</div>
 
-		<!--
 		<div>
-			<cap-widget data-cap-api-endpoint="http://localhost:5173/captcha/"></cap-widget>
+			<cap-widget data-cap-api-endpoint="http://localhost:5173/captcha/67b1fb59002fe3c932ff/"
+			></cap-widget>
 			<script src="https://cdn.jsdelivr.net/npm/@cap.js/widget"></script>
 		</div>
-		-->
 
 		<div class="w-full">
 			<Button type="submit" class="w-full">

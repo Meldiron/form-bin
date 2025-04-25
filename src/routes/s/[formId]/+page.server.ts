@@ -4,7 +4,7 @@ import { APPWRITE_API_KEY } from '$env/static/private';
 import { Client, Databases, ID, Permission, Role } from 'node-appwrite';
 
 import type { Actions } from './$types';
-import { cap } from '$lib/captcha';
+import { capEasy, capHard, capMedium } from '$lib/captcha';
 
 export const actions = {
 	default: async ({ request, params }) => {
@@ -49,13 +49,17 @@ export const actions = {
 			contents += key + ' ' + data.get(key) + ' ';
 		}
 
-		if (form.captcha2 === true) {
+		if ((form.captchaLevel ?? 'none') !== 'none') {
 			const captcha = data.get('cap-token');
 			if (!captcha) {
 				throw redirect(302, `/s/${formId}?captcha=yes&msg=Please complete the captcha.`);
 			}
 
-			const { success } = await cap.validateToken(captcha);
+			const captchaLevel = form.captchaLevel ?? 'easy';
+			const capInstance =
+				captchaLevel === 'easy' ? capEasy : captchaLevel === 'medium' ? capMedium : capHard;
+
+			const { success } = await capInstance.validateToken(captcha);
 			if (!success) {
 				throw redirect(302, `/s/${formId}?captcha=yes&msg=Invalid captcha.`);
 			}

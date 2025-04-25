@@ -79,7 +79,7 @@
 		try {
 			await databases.updateDocument('main', 'forms', data.form.$id, {
 				stopForumSpam: data.form.stopForumSpam,
-				captcha2: data.form.captcha2
+				captchaLevel: captchaLevel ?? 'none'
 			});
 			await invalidateAll();
 			toast.success('Anti spam saved.');
@@ -112,7 +112,7 @@
   ...
   
   <cap-widget
-    data-cap-api-endpoint="https://formbin.almostapps.eu/captcha/"
+    data-cap-api-endpoint="https://formbin.almostapps.eu/captcha/${data.form.$id}/"
   ></cap-widget>
   
   ...
@@ -121,6 +121,15 @@
 	let formName = $derived(
 		data.form.name.length <= 10 ? data.form.name : data.form.name.slice(0, 10) + '...'
 	);
+
+	let captchaLevel = $state(data.form.captchaLevel ?? 'none');
+	const captchaOptions = [
+		{ value: 'none', label: 'None' },
+		{ value: 'easy', label: 'Easy (Fast)' },
+		{ value: 'medium', label: 'Medium' },
+		{ value: 'hard', label: 'Hard (Slow)' }
+	];
+	let selectedCaptchaOption = $derived(captchaOptions.find((opt) => opt.value === captchaLevel));
 </script>
 
 <Breadcrumb.Root class="mb-6 flex justify-center">
@@ -220,10 +229,30 @@
 								</Card.Description>
 							</div>
 
-							<Switch bind:checked={data.form.captcha2} />
+							<Select.Root
+								selected={selectedCaptchaOption}
+								onSelectedChange={(v) => {
+									captchaLevel = v?.value ?? 'none';
+								}}
+								portal={null}
+							>
+								<Select.Trigger class="w-[180px]">
+									<Select.Value placeholder="Select captcha level" />
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Group>
+										{#each captchaOptions as captchaOption}
+											<Select.Item value={captchaOption.value} label={captchaOption.label}
+												>{captchaOption.label}</Select.Item
+											>
+										{/each}
+									</Select.Group>
+								</Select.Content>
+								<Select.Input />
+							</Select.Root>
 						</div>
 
-						{#if data.form.captcha2 === true}
+						{#if captchaLevel !== 'none'}
 							<Alert.Root class="mt-4">
 								<TriangleAlert class="h-4 w-4" />
 								<Alert.Title>Integration required!</Alert.Title>

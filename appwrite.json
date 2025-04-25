@@ -93,20 +93,13 @@
 					"default": false
 				},
 				{
-					"key": "captcha",
+					"key": "captchaLevel",
 					"type": "string",
 					"required": false,
 					"array": false,
-					"elements": ["none", "low", "medium", "high"],
+					"elements": ["none", "easy", "medium", "hard"],
 					"format": "enum",
 					"default": "none"
-				},
-				{
-					"key": "captcha2",
-					"type": "boolean",
-					"required": false,
-					"array": false,
-					"default": false
 				}
 			],
 			"indexes": []

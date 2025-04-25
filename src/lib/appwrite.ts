@@ -13,7 +13,7 @@ export type AppwriteForm = {
 	pinged: boolean;
 	discordUrl: string;
 	stopForumSpam: boolean;
-	captcha2: boolean;
+	captchaLevel: 'none' | 'easy' | 'medium' | 'hard' | string;
 } & Models.Document;
 
 export type AppwriteSubmission = {
