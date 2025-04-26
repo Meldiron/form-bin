@@ -32,7 +32,7 @@ export async function POST({ params }: any) {
 
 	const capInstance =
 		captchaLevel === 'easy' ? capEasy : captchaLevel === 'medium' ? capMedium : capHard;
-	const captchaCount = captchaLevel === 'easy' ? 48 : captchaLevel === 'medium' ? 128 : 512;
+	const captchaCount = captchaLevel === 'easy' ? 32 : captchaLevel === 'medium' ? 64 : 128;
 
 	const challenge = capInstance.createChallenge({
 		challengeCount: captchaCount,
